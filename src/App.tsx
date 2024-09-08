@@ -1,25 +1,39 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { useAuthStore } from "./store/useAuthStore";
+
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import GameCreationPage from "./pages/GameCreationPage";
+import GamePage from "./pages/GamePage";
+import Home from "./pages/Home";
+import CreatorDashboard from "./pages/CreatorDashboard";
+import PlayerDashboard from "./pages/PlayerDashboard";
+const queryClient = new QueryClient();
 
 function App() {
+  const { username, role } = useAuthStore();
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <QueryClientProvider client={queryClient}>
+      <Router>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          {role === "creator" && (
+            <Route path="/creator-dashboard" element={<CreatorDashboard />} />
+          )}
+          {role === "creator" && (
+            <Route
+              path="/creator-dashboard/:gameName"
+              element={<GameCreationPage />}
+            />
+          )}
+          {role === "player" && (
+            <Route path="/player-dashboard" element={<PlayerDashboard />} />
+          )}
+          {role === "player" && (
+            <Route path="/player-dashboard/:gameName" element={<GamePage />} />
+          )}
+        </Routes>
+      </Router>
+    </QueryClientProvider>
   );
 }
 
