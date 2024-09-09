@@ -1,6 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useAuthStore } from "./store/useAuthStore";
-
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import GameCreationPage from "./pages/Creator/GameCreationPage";
 import Home from "./pages/Home";
@@ -10,7 +9,7 @@ import GamePage from "./pages/Player/GamePage";
 const queryClient = new QueryClient();
 
 function App() {
-  const { username, role } = useAuthStore();
+  const { role } = useAuthStore();
   return (
     <QueryClientProvider client={queryClient}>
       <Router>
@@ -31,6 +30,7 @@ function App() {
           {role === "player" && (
             <Route path="/player-dashboard/:gameName" element={<GamePage />} />
           )}
+          <Route path="*" element={<p>NOT FOUND</p>} />
         </Routes>
       </Router>
     </QueryClientProvider>

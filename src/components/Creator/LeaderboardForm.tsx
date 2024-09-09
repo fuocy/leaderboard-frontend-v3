@@ -1,9 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import React, { useState, useRef, useEffect } from "react";
-import { useAuthStore } from "../../store/useAuthStore";
 import axios from "axios";
 
-// Define the types for metric
 interface Metric {
   name: string;
   type: "text" | "number";
@@ -89,10 +87,10 @@ const LeaderboardForm: React.FC<LeaderboadFormProps> = ({
         game: gameName!,
         name: leaderboardName,
         metrics,
-        sorting, // Send sorting info
+        sorting,
       });
 
-      onClose(); // Close modal after creation
+      onClose();
     }
   };
 

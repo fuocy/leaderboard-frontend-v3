@@ -1,4 +1,3 @@
-// src/pages/PlayerDashboard.tsx
 import GoBack from "../../components/Common/GoBack";
 import FeatureGameList from "../../components/Common/FeatureGameList";
 

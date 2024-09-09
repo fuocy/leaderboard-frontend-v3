@@ -10,28 +10,12 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({ leaderboard }) => {
   const { gameName } = useParams<{ gameName: string }>();
   const [leaderboardData, setLeaderboardData] = useState<LeaderboardData[]>([]);
 
-  // useEffect(() => {
-  //   socket.on("leaderboard-update", (data: any) => {
-  //     if (data.game === gameName) {
-  //       setLeaderboardData((prev) => [
-  //         ...prev.filter((p) => p.username !== data.username),
-  //         data,
-  //       ]);
-  //     }
-  //   });
-
-  //   return () => {
-  //     socket.off("leaderboard-update");
-  //   };
-  // }, [gameName]);
-
   useEffect(() => {
     // Listen for leaderboard updates
     socket.on("leaderboard-update", (data: any[]) => {
       // Filter the players for the current game
       const filteredData = data.filter((player) => player.game === gameName);
 
-      // Update the leaderboard with the filtered data
       setLeaderboardData(filteredData);
     });
 

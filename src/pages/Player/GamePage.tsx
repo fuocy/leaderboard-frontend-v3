@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { io } from "socket.io-client";
@@ -27,9 +27,9 @@ const GamePage = () => {
     queryFn: () =>
       axios
         .get(`http://localhost:5000/api/leaderboards/${gameName}`)
-        .then((res) => res.data), // access the first element because the api return an array of leaderboards for the specific game
+        .then((res) => res.data),
   });
-  const leaderboard = leaderboards?.[0]; // if creator create multiple leaderboards for the game, take the first leaderboard.
+  const leaderboard = leaderboards?.[0]; // if creator create multiple leaderboards for the same game (currently impossible), take the first leaderboard.
 
   // Set initial playerState based on the metrics of the leaderboard
   useEffect(() => {
@@ -48,17 +48,12 @@ const GamePage = () => {
       ...prevState,
       [metricName]: value,
     }));
-    // Emit updated playerState to the server via Socket.io
-    // socket.emit("player-update", {
-    //   game: gameName,
-    //   username,
-    //   metrics: { ...playerState, [metricName]: value },
-    // });
   };
 
   useEffect(() => {
+    // Ensure there is data in playerState
     if (Object.keys(playerState).length > 0) {
-      // Ensure there is data in playerState
+      // Emit updated playerState to the server via Socket.io
       socket.emit("player-update", {
         game: gameName,
         username,
@@ -113,29 +108,6 @@ const GamePage = () => {
             handlePlayerStateChange={handlePlayerStateChange}
             setPlayerState={setPlayerState}
           />
-          // <div className="px-4 py-2 rounded-lg bg-orange-200">
-          //   <h2 className="text-xl mb-4 font-clashGrotesk font-semibold">
-          //     Player <span className="text-orange-500"> {username}</span> State:
-          //   </h2>
-          //   {leaderboard!.metrics.map((metric: any) => (
-          //     <div key={metric.name} className="mb-4">
-          //       <label className="block mb-2 font-medium font-clashGrotesk text-lg">
-          //         {metric.name} ({metric.type})
-          //       </label>
-          //       <input
-          //         type={metric.type === "text" ? "text" : "number"}
-          //         value={playerState[metric.name]}
-          //         onChange={(e) =>
-          //           handlePlayerStateChange(
-          //             metric.name,
-          //             metric.type === "text" ? e.target.value : +e.target.value
-          //           )
-          //         }
-          //         className="border-2 p-2 w-full outline-none border-transparent focus:border-orange-500"
-          //       />
-          //     </div>
-          //   ))}
-          // </div>
         )}
       </div>
 
@@ -155,80 +127,3 @@ const GamePage = () => {
 };
 
 export default GamePage;
-{
-  /* <div
-className="grid rounded-lg overflow-hidden"
-style={{
-  gridTemplateColumns: `repeat(${
-    leaderboard!.metrics.length + 2
-  }, minmax(100px, 1fr))`,
-}}
->
-<div className="font-bold text-lg font-clashGrotesk py-3 bg-orange-400 w-full text-center ">
-  Ranking
-</div>
-<div className="font-bold text-lg font-clashGrotesk py-3 bg-orange-400 w-full text-center">
-  Player
-</div>
-{leaderboard!.metrics.map((metric: any) => (
-  <div
-    className="font-bold text-lg font-clashGrotesk py-3 bg-orange-400 w-full text-center "
-    key={metric.name}
-  >
-    {metric.name}
-  </div>
-))}
-
-{sortedLeaderboardData?.map((player, index) => (
-  <React.Fragment key={index}>
-    <div
-      className={`font-clashGrotesk text-xl py-3 ${
-        index % 2 === 0 && "bg-gray-400"
-      } w-full text-center`}
-    >
-      0{index + 1}
-    </div>
-    <div
-      className={`font-clashGrotesk text-xl py-3 ${
-        index % 2 === 0 && "bg-gray-400"
-      } w-full text-center`}
-    >
-      {player.username}
-    </div>
-    {leaderboard!.metrics.map((metric: any) => (
-      <div
-        className={`font-clashGrotesk text-xl py-3 ${
-          index % 2 === 0 && "bg-gray-400"
-        } w-full text-center`}
-        key={metric.name}
-      >
-        {player.metrics[metric.name]}
-      </div>
-    ))}
-  </React.Fragment>
-))}
-</div> */
-}
-
-{
-  /* <table className="table-auto w-full">
-          <thead>
-            <tr>
-              <th>Player</th>
-              {leaderboard.metrics.map((metric: any) => (
-                <th key={metric.name}>{metric.name}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {sortedLeaderboardData?.map((player, index) => (
-              <tr key={index}>
-                <td>{player.username}</td>
-                {leaderboard.metrics.map((metric: any) => (
-                  <td key={metric.name}>{player.metrics[metric.name]}</td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
-        </table> */
-}

@@ -25,7 +25,7 @@ const GameCreationPage = () => {
     queryFn: () =>
       axios
         .get(`http://localhost:5000/api/leaderboards/${gameName}`)
-        .then((res) => res.data), // access the first element because the api return an array of leaderboards for the specific game
+        .then((res) => res.data),
   });
 
   const removeLeaderboardMutation = useMutation<unknown, unknown, string>({
@@ -42,12 +42,6 @@ const GameCreationPage = () => {
 
   if (isLoading) return <div>Loading...</div>;
   if (isError) return <div>{error.message}</div>;
-  // if (leaderboards?.length === 0)
-  //   return (
-  //     <p className="text-2xl font-clashGrotesk font-semibold text-center mt-7 up">
-  //       There's no leaderboard for this game yet
-  //     </p>
-  //   );
 
   return (
     <div className="relative p-8 h-screen">
@@ -96,7 +90,6 @@ const GameCreationPage = () => {
                   }, minmax(100px, 1fr))`,
                 }}
               >
-                {/* Header Row */}
                 <div className="font-bold text-lg font-clashGrotesk py-3 bg-orange-400 w-full text-center ">
                   Ranking
                 </div>
