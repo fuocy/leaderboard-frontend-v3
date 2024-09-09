@@ -137,7 +137,7 @@ const Login = () => {
                 </RadioGroupPrimitive.Item>
                 <label
                   htmlFor={role.id}
-                  className="block text-lg font-medium text-gray-700 dark:text-gray-400"
+                  className="block text-lg font-medium text-gray-900 "
                 >
                   {role.title}
                 </label>

@@ -37,7 +37,7 @@ const LeaderboardForm: React.FC<LeaderboadFormProps> = ({
   const [editIndex, setEditIndex] = useState<number | null>(null);
   const [selectedMetricForSorting, setSelectedMetricForSorting] = useState<
     string | null
-  >(null); // Sorting metric
+  >(null);
   const queryClient = useQueryClient();
 
   const handleEditMetric = (index: number) => {
@@ -69,18 +69,6 @@ const LeaderboardForm: React.FC<LeaderboadFormProps> = ({
     setMetricType("text");
   };
 
-  // const username = useAuthStore((state) => state.username);
-
-  // const addLeaderboardMutation = useMutation({
-  //   mutationFn: (newLeaderboard: {
-  //     name: string;
-  //     metrics: Metric[];
-  //     createdBy: string;
-  //   }) => addLeaderboard(newLeaderboard),
-  //   onSuccess: () => {
-  //     queryClient.invalidateQueries(["leaderboards", user.username]);
-  //   },
-  // });
   const createLeaderboardMutation = useMutation<unknown, unknown, Leaderboard>({
     mutationFn: (newLeaderboard) =>
       axios.post(
@@ -107,23 +95,6 @@ const LeaderboardForm: React.FC<LeaderboadFormProps> = ({
       onClose(); // Close modal after creation
     }
   };
-
-  // const handleCreateLeaderboard = async () => {
-  //   if (name.trim().length === 0) {
-  //     alert("Leaderboard name can't be blank");
-  //     return;
-  //   }
-
-  //   const leaderboard = {
-  //     name,
-  //     metrics,
-  //     createdBy: user.username,
-  //   };
-
-  //   addLeaderboardMutation.mutate(leaderboard);
-  //   setName("");
-  //   setMetrics([]);
-  // };
 
   const inputRef = useRef<HTMLInputElement | null>(null);
   useEffect(() => {
@@ -216,20 +187,24 @@ const LeaderboardForm: React.FC<LeaderboadFormProps> = ({
       </ul>
 
       <div className="mb-4">
-        <label className="block mb-2">
-          Choose a Metric to Sort (optional):
+        <label className="block mb-2 font-clashGrotesk text-lg ">
+          Sorting metric: (only support numeric metrics!)
         </label>
         <select
-          className="border p-2 mb-4 w-full"
+          className="mb-4 rounded p-3 w-full focus:border-orange-400 border-2 outline-none"
           value={selectedMetricForSorting || ""}
           onChange={(e) => setSelectedMetricForSorting(e.target.value || null)}
         >
-          <option value="">None</option>
-          {metrics.map((metric) => (
-            <option key={metric.name} value={metric.name}>
-              {metric.name}
-            </option>
-          ))}
+          <option value="" className="py-3">
+            None
+          </option>
+          {metrics
+            .filter((metric) => metric.type === "number")
+            .map((metric) => (
+              <option key={metric.name} value={metric.name} className="py-3">
+                {metric.name}
+              </option>
+            ))}
         </select>
       </div>
       <button
